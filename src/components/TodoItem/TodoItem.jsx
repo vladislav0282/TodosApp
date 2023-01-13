@@ -1,26 +1,67 @@
+/* eslint-disable no-unused-vars */
+import classNames from 'classnames'
+import { useState } from 'react'
+import { useTodoListMethodsContext } from '../../contexts/TodoListContextProvider'
 import styles from './todoItem.module.css'
+import { Modal } from '../Modal/Modal'
 
-export const TodoItem = ({title, id, index, completed, changeStatusTodo, deleteTodo}) => {
+export function TodoItem({
+  title,
+  id,
+  index,
+  completed,
+}) {
+  const { changeStatusTodo } = useTodoListMethodsContext()
 
-    const completeHandler = () => {
-        changeStatusTodo(id)
-    }
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
-    const deleteHandler = () => {
-        deleteTodo(id)
-    }
+  const closeDeleteModalHandler = () => {
+    setIsDeleteModalOpen(false)
+  }
 
+  const openDeleteModalHandler = () => {
+    setIsDeleteModalOpen(true)
+  }
 
-    return (
-        <li className = "list-group-item d-flex justify-content-between align-items-center">
-            <span className={completed ? styles.done : ""}>
-                {index + 1}. {title}
-            </span>
-            <div>
-                <button onClick={completeHandler} type="button" className={completed ? "btn btn-primary mx-2" : "btn btn-success mx-2"}>{completed ? "Undone" : "Done"}</button>
- 
-                <button onClick={deleteHandler} type="button" className="btn btn-danger">Delete</button>
-            </div>
-        </li>
-    )
+  const completeHandler = () => {
+    changeStatusTodo(id)
+  }
+
+  // const deleteHandler = () => {
+  //   deleteTodo(id)
+  // }
+
+  return (
+    <li className="list-group-item d-flex justify-content-between align-items-center">
+      <span className={completed ? styles.done : ''}>
+        {index + 1}
+        .
+        {title}
+      </span>
+      <Modal isOpen={isDeleteModalOpen} closeHandler={closeDeleteModalHandler}>
+        <p>Hello</p>
+      </Modal>
+      <div>
+        <button
+          onClick={completeHandler}
+          type="button"
+          className={classNames(
+            'btn',
+            'mx-2',
+            { 'btn-primary': completed },
+            { 'btn-success': !completed },
+          )}
+        >
+          {completed ? 'Undone' : 'Done'}
+        </button>
+        <button
+          onClick={openDeleteModalHandler}
+          type="button"
+          className="btn btn-danger"
+        >
+          Delete
+        </button>
+      </div>
+    </li>
+  )
 }

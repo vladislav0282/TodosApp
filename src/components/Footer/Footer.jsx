@@ -1,16 +1,25 @@
-import footerStyle from './footer.module.css'
+import { memo } from 'react'
+import { useTodoListMethodsContext } from '../../contexts/TodoListContextProvider'
 
-export const Footer = ({ clearAllTodos, id, todos, title }) => { const clearHandler = () => {
-clearAllTodos(id)
-    }
+export const Footer = memo(() => {
+  console.log('Render Footer')
 
-    return (
-        <footer className="d-flex justify-content-center">
-            <div>
-                <button onClick={clearHandler} type="button" 
-                className={!todos.length ? "btn btn-dark mx-2" : "btn btn-warning mx-2"}>{!todos.length ? "Cleared" : "Clear All"}
-                </button>
-            </div>
-        </footer>
-    )
-}
+  const { clearAllTodos } = useTodoListMethodsContext()
+
+  const clearHandler = (e) => {
+    clearAllTodos(e, 'hello')
+  }
+
+  return (
+    <footer className="d-flex justify-content-center">
+      <button
+        // onClick={clearAllTodos}
+        onClick={clearHandler}
+        type="button"
+        className="btn btn-dark"
+      >
+        Clear all
+      </button>
+    </footer>
+  )
+})
